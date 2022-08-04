@@ -1,0 +1,25 @@
+{% extends 'backend/base.html' %}
+
+
+{% block title %} Create Product {% endblock %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Create Product</h1>
+    <a href="{% url 'product:list.product' %}" class="float-right btn btn-primary">All Product</a>
+</div>
+
+<div id="app">
+    <!-- I'm sorry I can't react js.  I request you to kindly consider this matter. 
+     This is because I am still learning.Here I am unable to run those files- 
+     templates/assets/js/components/CreateProduct.js.I could not run this files despite 
+     my best efforts. Therefore I could not complete any functionality of CreateProductView 
+     class which is under Djangoproduct.py
+     I'll try my level best to be fairly knowledgeable about this topic in the next few days. 
+      Therefore I hope you will give me an opportunity to consider the matter with a 
+      little forgiving eye -->
+    <create-product :variants="{{variants|safe}}"></create-product>
+</div>
+
+
+{% endblock %}

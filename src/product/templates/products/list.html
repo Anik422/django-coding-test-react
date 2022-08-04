@@ -1,0 +1,191 @@
+{% extends 'backend/base.html' %}
+
+{% block title %} Product List {% endblock %}
+
+{% block content %}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Products</h1>
+</div>
+
+
+<div class="card">
+    <form method="POST" class="card-header">
+        {% csrf_token %}
+        <div class="form-row justify-content-between">
+            <div class="col-md-2">
+                <input type="text" name="title" placeholder="Product Title" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <select name="variant" id="" class="form-control">
+                    <option selected value="">--Select A Variant--</option>
+                    {% for variant in variants %}
+                    <option value="{{ variant.variant_title }}">{{ variant.variant_title }}</option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Price Range</span>
+                    </div>
+                    <input type="text" name="price_from" aria-label="First name" placeholder="From"
+                        class="form-control">
+                    <input type="text" name="price_to" aria-label="Last name" placeholder="To" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="date" placeholder="Date" class="form-control">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary float-right"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+
+    <div class="card-body">
+        <div class="table-response">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Variant</th>
+                        <th width="150px">Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% if products %}
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.title }} <br> Created at : {{ product.created_at }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>
+                            <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
+                                {% if ProductPriceFilterData %}
+                                {% for productVariantPrice in ProductPriceFilterData %}
+                                    {% for price_size in productVariantPrice %}
+                                    {% if price_size.product.id == product.id %}
+                                    <dt class="col-sm-3 pb-0">
+                                        {{ price_size.product_variant_one.variant_title }}/ 
+                                        {{ price_size.product_variant_two.variant_title }}/ 
+                                        {{ price_size.product_variant_three.variant_title }}
+                                    </dt>
+                                    <dd class="col-sm-9">
+                                        <dl class="row mb-0">
+                                            <dd class="col-sm-4 pb-0">Price : {{ price_size.price }}</dd>
+                                            <dd class="col-sm-8 pb-0">InStock : {{ price_size.stock }}</dd>
+                                        </dl>
+                                    </dd>
+                                    {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                                {% else %}
+                                {% for price_size in productVariantPrice %}
+                                {% if price_size.product.id == product.id %}
+                                <dt class="col-sm-3 pb-0">
+                                    {{ price_size.product_variant_one.variant_title }}/ 
+                                    {{ price_size.product_variant_two.variant_title }}/ 
+                                    {{ price_size.product_variant_three.variant_title }}
+                                </dt>
+                                <dd class="col-sm-9">
+                                    <dl class="row mb-0">
+                                        <dd class="col-sm-4 pb-0">Price : {{ price_size.price }}</dd>
+                                        <dd class="col-sm-8 pb-0">InStock : {{ price_size.stock }}</dd>
+                                    </dl>
+                                </dd>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                            </dl>
+                            <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more
+                            </button>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="" class="btn btn-success">Edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+    <div class="card-footer">
+        <div class="row justify-content-between">
+            <div class="col-md-6">
+                {% if is_paginated %}
+                <ul class="pagination">
+                <!-- {% if page_obj.has_previous %}
+                    <li>
+                        <span><a href="?page={{ page_obj.previous_page_number }}">Previous</a></span>
+                    </li>
+                {% endif %} -->
+                    <li class="">
+                        <span>Showing {{ page_obj.start_index }} of {{page_obj.end_index}} out of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                <!-- {% if page_obj.has_next %}
+                    <li>
+                        <span><a href="?page={{ page_obj.next_page_number }}">Next</a></span>
+                    </li>
+                {% endif %} -->
+                </ul>
+                {% else %}
+                    <!-- <h3>Your File Exam</h3>
+                    <p>File not yet available</p> -->
+                {% endif %}
+
+
+
+
+
+                <ul class="pagination">
+
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
+                    {% endif %}
+                    
+                    {% if page_obj.number|add:'-4' > 1 %}
+                        <li><a href="?page={{ page_obj.number|add:'-5' }}">&hellip;</a></li>
+                    {% endif %}
+                    
+                    {% for i in page_obj.paginator.page_range %}
+                        {% if page_obj.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% elif i > page_obj.number|add:'-5' and i < page_obj.number|add:'5' %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.paginator.num_pages > page_obj.number|add:'4' %}
+                        <li><a href="?page={{ page_obj.number|add:'5' }}">&hellip;</a></li>
+                    {% endif %}
+                    
+                    {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+                    {% else %}
+                        <li class="disabled"><span><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+                    {% endif %}
+                    
+                    </ul>
+                    
+            </div>
+            <div class="col-md-2">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
