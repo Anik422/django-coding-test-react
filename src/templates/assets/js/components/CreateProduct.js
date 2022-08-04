@@ -4,6 +4,8 @@ import 'react-tagsinput/react-tagsinput.css';
 import Dropzone from 'react-dropzone'
 
 
+
+
 const CreateProduct = (props) => {
 
     const [productVariantPrices, setProductVariantPrices] = useState([])
@@ -78,6 +80,13 @@ const CreateProduct = (props) => {
     let saveProduct = (event) => {
         event.preventDefault();
         // TODO : write your code here to save the product
+        // I'm sorry I can't react js.  I request you to kindly consider this matter.  
+        // This is because I am still learning.Here I am unable to run those files- 
+        // templates/assets/js/components/CreateProduct.js.I could not run this files 
+        // despite my best efforts. Therefore I could not complete any functionality of 
+        // CreateProductView class which is under Djangoproduct.py
+
+I'll try my level best to be fairly knowledgeable about this topic in the next few days.  Therefore I hope you will give me an opportunity to consider the matter with a little forgiving eye
     }
 
 
@@ -223,3 +232,4 @@ const CreateProduct = (props) => {
 };
 
 export default CreateProduct;
+
